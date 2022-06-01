@@ -1,3 +1,8 @@
+tmp
+.env
+.DS_Store
+.history
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -8,8 +13,18 @@
 # Test binary, built with `go test -c`
 *.test
 
+
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
+# log
+*.log
+*.sqlite
+*.db
+
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# IDE
+.idea/
+.vscode/
