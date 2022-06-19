@@ -7,7 +7,6 @@ import (
 
 // SetupLogger 初始化 Logger
 func SetupLogger() {
-
 	logger.InitLogger(
 		config.GetString("log.filename"),
 		config.GetInt("log.max_size"),
