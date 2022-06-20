@@ -4,7 +4,7 @@ import (
 	v1 "goapi/app/http/controllers/api/v1"
 	"goapi/pkg/captcha"
 	"goapi/pkg/logger"
-	"net/http"
+	"goapi/pkg/response"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,7 +22,7 @@ func (vc *VerifyCodeController) ShowCaptcha(c *gin.Context) {
 	logger.LogIf(err)
 
 	// 返回给用户
-	c.JSON(http.StatusOK, gin.H{
+	response.JSON(c, gin.H{
 		"captcha_id":    id,
 		"captcha_image": b64s,
 	})
