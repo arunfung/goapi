@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// VerifyCodeController 用户控制器
+// VerifyCodeController 验证码控制器
 type VerifyCodeController struct {
 	v1.BaseAPIController
 }
