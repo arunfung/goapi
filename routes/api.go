@@ -2,6 +2,9 @@ package routes
 
 import (
 	"goapi/app/http/controllers/api/v1/auth"
+	"goapi/app/http/middlewares"
+	pkgAuth "goapi/pkg/auth"
+	"goapi/pkg/response"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,6 +14,10 @@ func RegisterAPIRoutes(r *gin.Engine) {
 	// 测试一个 v1 的路由组，我们所有的 v1 版本的路由都将存放到这里
 	v1 := r.Group("/v1")
 	{
+		v1.GET("/test_auth", middlewares.AuthJWT(), func(c *gin.Context) {
+			userModel := pkgAuth.CurrentUser(c)
+			response.Data(c, userModel)
+		})
 		authGroup := v1.Group("/auth")
 		{
 			suc := new(auth.SignupController)
