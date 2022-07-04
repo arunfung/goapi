@@ -18,6 +18,9 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			userModel := pkgAuth.CurrentUser(c)
 			response.Data(c, userModel)
 		})
+		v1.GET("/test_guest", middlewares.GuestJWT(), func(c *gin.Context) {
+			c.String(http.StatusOK, "Hello guest")
+		})
 		authGroup := v1.Group("/auth")
 		{
 			suc := new(auth.SignupController)
