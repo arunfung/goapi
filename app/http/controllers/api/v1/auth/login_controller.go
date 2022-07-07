@@ -6,7 +6,9 @@ import (
 	"goapi/pkg/auth"
 	"goapi/pkg/jwt"
 	"goapi/pkg/response"
+	"os"
 
+	"github.com/getsentry/sentry-go"
 	"github.com/gin-gonic/gin"
 )
 
@@ -41,6 +43,10 @@ func (lc *LoginController) LoginByPhone(c *gin.Context) {
 
 // LoginByPassword 多种方法登录，支持手机号、email 和用户名
 func (lc *LoginController) LoginByPassword(c *gin.Context) {
+	_, err := os.Open("filename.ext")
+	if err != nil {
+		sentry.CaptureException(err)
+	}
 	// 1. 验证表单
 	request := requests.LoginByPasswordRequest{}
 	if ok := requests.Validate(c, &request, requests.LoginByPassword); !ok {

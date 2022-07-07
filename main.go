@@ -6,7 +6,10 @@ import (
 	"goapi/bootstrap"
 	btsConfig "goapi/config"
 	"goapi/pkg/config"
+	"log"
 
+	"github.com/getsentry/sentry-go"
+	sentrygin "github.com/getsentry/sentry-go/gin"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,6 +26,23 @@ func main() {
 	flag.Parse()
 	config.InitConfig(env)
 
+	// To initialize Sentry's handler, you need to initialize Sentry itself beforehand
+	if err := sentry.Init(sentry.ClientOptions{
+		Dsn: config.Get("app.sentry_dsn"),
+		// Set TracesSampleRate to 1.0 to capture 100%
+		// of transactions for performance monitoring.
+		// We recommend adjusting this value in production,
+		TracesSampleRate: 1.0,
+		// Or provide a custom sampler:
+		TracesSampler: sentry.TracesSamplerFunc(func(ctx sentry.SamplingContext) sentry.Sampled {
+			return sentry.SampledTrue
+		}),
+	}); err != nil {
+		log.Fatalf("sentry.Init: %s", err)
+		fmt.Printf("Sentry initialization failed: %v\n", err)
+	}
+
+	sentry.CaptureMessage("It works!")
 	// 初始化 Logger
 	bootstrap.SetupLogger()
 
@@ -40,6 +60,7 @@ func main() {
 
 	// new 一个 Gin Engine 实例
 	router := gin.New()
+	router.Use(sentrygin.New(sentrygin.Options{}))
 
 	// 初始化路由绑定
 	bootstrap.SetupRoute(router)

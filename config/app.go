@@ -26,6 +26,8 @@ func init() {
 
 			// 设置时区，JWT 里会使用，日志记录里也会使用到
 			"timezone": config.Env("TIMEZONE", "Asia/Shanghai"),
+
+			"sentry_dsn": config.Env("SENTRY_DSN", "https://e9d1aa965e584ffcbb2ae719b024cb89@o175590.ingest.sentry.io/6550349"),
 		}
 	})
 }
