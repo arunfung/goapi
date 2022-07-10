@@ -68,7 +68,8 @@ var CmdMake = &cobra.Command{
 func init() {
 	// 注册 make 的子命令
 	CmdMake.AddCommand(
-		Cmd,
+		MakeCmd,
+		MakeModel,
 	)
 }
 

@@ -7,14 +7,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var Cmd = &cobra.Command{
+var MakeCmd = &cobra.Command{
 	Use:   "cmd",
 	Short: "Create a command, should be snake_case, exmaple: make cmd buckup_database",
-	Run:   runCmd,
+	Run:   runMakeCmd,
 	Args:  cobra.ExactArgs(1), // 只允许且必须传 1 个参数
 }
 
-func runCmd(cmd *cobra.Command, args []string) {
+func runMakeCmd(cmd *cobra.Command, args []string) {
 
 	// 格式化模型名称，返回一个 Model 对象
 	model := makeModelFromString(args[0])
