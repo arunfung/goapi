@@ -71,6 +71,7 @@ func init() {
 		MakeCmd,
 		MakeModel,
 		MakeAPIController,
+		MakeRequest,
 	)
 }
 
