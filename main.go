@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"goapi/app/cmd"
+	"goapi/app/cmd/make"
 	"goapi/bootstrap"
 	btsConfig "goapi/config"
 	"goapi/pkg/config"
@@ -49,6 +50,7 @@ func main() {
 		cmd.WebServe,
 		cmd.KeyGenerate,
 		cmd.Play,
+		make.CmdMake,
 	)
 
 	// 配置默认运行 Web 服务
