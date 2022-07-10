@@ -19,7 +19,7 @@ func init() {
 
 func main() {
 
-	// 应用的主入口，默认调用 cmd.CmdServe 命令
+	// 应用的主入口，默认调用 cmd.WebServe 命令
 	var rootCmd = &cobra.Command{
 		Use:   config.Get("app.name"),
 		Short: "A simple forum project",
@@ -47,6 +47,7 @@ func main() {
 	// 注册子命令
 	rootCmd.AddCommand(
 		cmd.WebServe,
+		cmd.KeyGenerate,
 	)
 
 	// 配置默认运行 Web 服务
