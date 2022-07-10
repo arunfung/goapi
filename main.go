@@ -48,6 +48,7 @@ func main() {
 	rootCmd.AddCommand(
 		cmd.WebServe,
 		cmd.KeyGenerate,
+		cmd.Play,
 	)
 
 	// 配置默认运行 Web 服务
