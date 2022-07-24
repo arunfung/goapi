@@ -1,6 +1,7 @@
 package routes
 
 import (
+	controllers "goapi/app/http/controllers/api/v1"
 	"goapi/app/http/controllers/api/v1/auth"
 	"goapi/app/http/middlewares"
 	pkgAuth "goapi/pkg/auth"
@@ -32,7 +33,6 @@ func RegisterAPIRoutes(r *gin.Engine) {
 		// 限流中间件：每小时限流，作为参考 Github API 每小时最多 60 个请求（根据 IP）
 		// 测试时，可以调高一点
 		authGroup.Use(middlewares.LimitIP("1000-H"))
-
 		{
 
 			suc := new(auth.SignupController)
@@ -67,6 +67,11 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			authGroup.POST("/password-reset/using-phone", middlewares.LimitPerRoute("60-H"), middlewares.GuestJWT(), pwc.ResetByPhone)
 			authGroup.POST("/password-reset/using-email", middlewares.LimitPerRoute("60-H"), middlewares.GuestJWT(), pwc.ResetByEmail)
 		}
+
+		uc := new(controllers.UsersController)
+
+		// 获取当前用户
+		v1.GET("/user", middlewares.AuthJWT(), uc.CurrentUser)
 		// 注册一个路由
 		v1.GET("/", func(c *gin.Context) {
 			// 以 JSON 格式响应
