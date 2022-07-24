@@ -72,6 +72,7 @@ func init() {
 		MakeModel,
 		MakeAPIController,
 		MakeRequest,
+		MakeMigration,
 	)
 }
 
