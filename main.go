@@ -51,6 +51,7 @@ func main() {
 		cmd.KeyGenerate,
 		cmd.Play,
 		make.CmdMake,
+		cmd.Migrate,
 	)
 
 	// 配置默认运行 Web 服务
