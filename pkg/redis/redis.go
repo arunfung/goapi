@@ -109,6 +109,33 @@ func (rds RedisClient) FlushDB() bool {
 	return true
 }
 
+// FlushByPrefix 根据前缀清空数据
+func (rds RedisClient) FlushByPrefix(prefix string) bool {
+
+	iterator := rds.Client.Scan(rds.Context, 0, prefix+"*", 0).Iterator()
+
+	_, err := rds.Client.Pipelined(rds.Context, func(pipeliner redis.Pipeliner) error {
+
+		for iterator.Next(rds.Context) {
+			err := pipeliner.Del(rds.Context, iterator.Val()).Err()
+			if err != nil {
+				logger.ErrorString("Redis", "FlushByPrefix Del", err.Error())
+			}
+		}
+		if err := iterator.Err(); err != nil {
+			logger.ErrorString("Redis", "FlushByPrefix Scan", err.Error())
+			return err
+		}
+		return nil
+	})
+
+	if err != nil {
+		logger.ErrorString("Redis", "FlushByPrefix Pipelined", err.Error())
+		return false
+	}
+	return true
+}
+
 // Increment 当参数只有 1 个时，为 key，其值增加 1。
 // 当参数有 2 个时，第一个参数为 key ，第二个参数为要增加的值 int64 类型。
 func (rds RedisClient) Increment(parameters ...interface{}) bool {

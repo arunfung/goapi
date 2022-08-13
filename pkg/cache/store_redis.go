@@ -40,7 +40,7 @@ func (s *RedisStore) Forever(key string, value string) {
 }
 
 func (s *RedisStore) Flush() {
-	s.RedisClient.FlushDB()
+	s.RedisClient.FlushByPrefix(s.KeyPrefix)
 }
 
 func (s *RedisStore) Increment(parameters ...interface{}) {
