@@ -97,6 +97,13 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			tpcGroup.GET("/:id", tpc.Show)
 		}
 
+		// 链接
+		lsc := new(controllers.LinksController)
+		linksGroup := v1.Group("/links")
+		{
+			linksGroup.GET("", lsc.Index)
+		}
+
 		// 注册一个路由
 		v1.GET("/", func(c *gin.Context) {
 			// 以 JSON 格式响应
