@@ -36,12 +36,14 @@ func RegisterAPIRoutes(r *gin.Engine) {
 		})
 		authGroup := v1.Group("/auth")
 
+		authControllers := auth.BuildInjector()
+
 		// 限流中间件：每小时限流，作为参考 Github API 每小时最多 60 个请求（根据 IP）
 		// 测试时，可以调高一点
 		authGroup.Use(middlewares.LimitIP("1000-H"))
 		{
 
-			suc := new(auth.SignupController)
+			suc := authControllers.SignupController
 			// 判断手机是否已注册
 			authGroup.POST("/signup/phone/exist", middlewares.GuestJWT(), middlewares.LimitPerRoute("60-H"), suc.IsPhoneExist)
 			// 判断 Email 是否已注册
@@ -52,7 +54,7 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			authGroup.POST("/signup/using-email", middlewares.GuestJWT(), suc.SignupUsingEmail)
 
 			// 发送验证码
-			vcc := new(auth.VerifyCodeController)
+			vcc := authControllers.VerifyCodeController
 			// 图片验证码，需要加限流
 			authGroup.POST("/verify-codes/captcha", middlewares.LimitPerRoute("50-H"), vcc.ShowCaptcha)
 			// 发送短信验证码
@@ -60,7 +62,7 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			// 发送邮箱验证码
 			authGroup.POST("/verify-codes/email", middlewares.LimitPerRoute("20-H"), vcc.SendUsingEmail)
 
-			lgc := new(auth.LoginController)
+			lgc := authControllers.LoginController
 			// 使用手机号，短信验证码进行登录
 			authGroup.POST("/login/using-phone", middlewares.GuestJWT(), middlewares.LimitPerRoute("60-H"), lgc.LoginByPhone)
 			// 支持手机号，Email 和 用户名
@@ -69,7 +71,7 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			authGroup.POST("/login/refresh-token", middlewares.AuthJWT(), lgc.RefreshToken)
 
 			// 重置密码
-			pwc := new(auth.PasswordController)
+			pwc := authControllers.PasswordController
 			authGroup.POST("/password-reset/using-phone", middlewares.LimitPerRoute("60-H"), middlewares.GuestJWT(), pwc.ResetByPhone)
 			authGroup.POST("/password-reset/using-email", middlewares.LimitPerRoute("60-H"), middlewares.GuestJWT(), pwc.ResetByEmail)
 		}

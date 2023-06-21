@@ -31,8 +31,8 @@ func SetupDB() {
 		})
 	case "sqlite":
 		// 初始化 sqlite
-		database := config.Get("database.sqlite.database")
-		dbConfig = sqlite.Open(database)
+		db := config.Get("database.sqlite.database")
+		dbConfig = sqlite.Open(db)
 	default:
 		panic(errors.New("database connection not supported"))
 	}
